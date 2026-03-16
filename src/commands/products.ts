@@ -1,0 +1,107 @@
+import { Command } from 'commander';
+import * as api from '../client';
+import { output, printTable, printSuccess, truncate } from '../output';
+import { requireProjectId } from '../helpers';
+
+export function register(program: Command): void {
+  const cmd = program.command('products').description('Manage products');
+
+  cmd
+    .command('list')
+    .alias('ls')
+    .description('List products')
+    .option('-p, --project <id>', 'Project ID')
+    .action(async (opts) => {
+      const pid = requireProjectId(opts);
+      const data = await api.paginate(`/projects/${pid}/products`);
+      output(data, () => {
+        printTable(
+          ['ID', 'Store Identifier', 'Type', 'App ID'],
+          data.map((p: any) => [
+            p.id,
+            p.store_identifier || '-',
+            p.type || '-',
+            p.app_id || '-',
+          ]),
+        );
+      });
+    });
+
+  cmd
+    .command('get <productId>')
+    .description('Get product details')
+    .option('-p, --project <id>', 'Project ID')
+    .action(async (productId, opts) => {
+      const pid = requireProjectId(opts);
+      const data = await api.get(`/projects/${pid}/products/${productId}`);
+      output(data, () => {
+        printTable(
+          ['Field', 'Value'],
+          Object.entries(data).map(([k, v]) => [
+            k,
+            typeof v === 'object' ? JSON.stringify(v) : String(v ?? '-'),
+          ]),
+        );
+      });
+    });
+
+  cmd
+    .command('create')
+    .description('Create a product')
+    .option('-p, --project <id>', 'Project ID')
+    .requiredOption('--store-identifier <id>', 'Store identifier (e.g. com.app.monthly)')
+    .requiredOption('--app-id <id>', 'App ID')
+    .requiredOption('--type <type>', 'Product type: subscription or one_time')
+    .action(async (opts) => {
+      const pid = requireProjectId(opts);
+      const data = await api.post(`/projects/${pid}/products`, {
+        store_identifier: opts.storeIdentifier,
+        app_id: opts.appId,
+        type: opts.type,
+      });
+      output(data, () => printSuccess(`Product created: ${data.id}`));
+    });
+
+  cmd
+    .command('update <productId>')
+    .description('Update a product')
+    .option('-p, --project <id>', 'Project ID')
+    .option('--display-name <name>', 'Display name')
+    .action(async (productId, opts) => {
+      const pid = requireProjectId(opts);
+      const body: any = {};
+      if (opts.displayName) body.display_name = opts.displayName;
+      const data = await api.post(`/projects/${pid}/products/${productId}`, body);
+      output(data, () => printSuccess(`Product ${productId} updated.`));
+    });
+
+  cmd
+    .command('delete <productId>')
+    .description('Delete a product')
+    .option('-p, --project <id>', 'Project ID')
+    .action(async (productId, opts) => {
+      const pid = requireProjectId(opts);
+      await api.del(`/projects/${pid}/products/${productId}`);
+      printSuccess(`Product ${productId} deleted.`);
+    });
+
+  cmd
+    .command('archive <productId>')
+    .description('Archive a product')
+    .option('-p, --project <id>', 'Project ID')
+    .action(async (productId, opts) => {
+      const pid = requireProjectId(opts);
+      await api.post(`/projects/${pid}/products/${productId}/actions/archive`);
+      printSuccess(`Product ${productId} archived.`);
+    });
+
+  cmd
+    .command('unarchive <productId>')
+    .description('Unarchive a product')
+    .option('-p, --project <id>', 'Project ID')
+    .action(async (productId, opts) => {
+      const pid = requireProjectId(opts);
+      await api.post(`/projects/${pid}/products/${productId}/actions/unarchive`);
+      printSuccess(`Product ${productId} unarchived.`);
+    });
+}
