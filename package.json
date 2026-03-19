@@ -1,6 +1,6 @@
 {
   "name": "revenuecat-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unofficial CLI for RevenueCat REST API v2",
   "main": "dist/index.js",
   "bin": {
@@ -11,10 +11,19 @@
     "dev": "tsc --watch",
     "start": "node dist/index.js"
   },
-  "keywords": ["revenuecat", "cli", "subscriptions", "in-app-purchases", "revenue"],
+  "keywords": [
+    "revenuecat",
+    "cli",
+    "subscriptions",
+    "in-app-purchases",
+    "revenue"
+  ],
   "author": "",
   "license": "MIT",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "dependencies": {
     "chalk": "^4.1.2",
     "cli-table3": "^0.6.5",
