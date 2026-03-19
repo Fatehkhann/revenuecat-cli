@@ -58,7 +58,11 @@ export function register(program: Command): void {
         lookup_key: opts.lookupKey,
         display_name: opts.displayName,
       };
-      if (opts.position) body.position = parseInt(opts.position);
+      if (opts.position) {
+        const pos = parseInt(opts.position, 10);
+        if (Number.isNaN(pos)) throw new Error('--position must be a number');
+        body.position = pos;
+      }
       const data = await api.post(
         `/projects/${pid}/offerings/${offeringId}/packages`,
         body,
@@ -76,7 +80,11 @@ export function register(program: Command): void {
       const pid = requireProjectId(opts);
       const body: any = {};
       if (opts.displayName) body.display_name = opts.displayName;
-      if (opts.position) body.position = parseInt(opts.position);
+      if (opts.position) {
+        const pos = parseInt(opts.position, 10);
+        if (Number.isNaN(pos)) throw new Error('--position must be a number');
+        body.position = pos;
+      }
       const data = await api.post(`/projects/${pid}/packages/${packageId}`, body);
       output(data, () => printSuccess(`Package ${packageId} updated.`));
     });

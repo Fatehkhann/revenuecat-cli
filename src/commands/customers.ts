@@ -155,7 +155,12 @@ export function register(program: Command): void {
     .action(async (customerId, opts) => {
       const pid = requireProjectId(opts);
       if (opts.set) {
-        const attrs = JSON.parse(opts.set);
+        let attrs: Record<string, unknown>;
+        try {
+          attrs = JSON.parse(opts.set);
+        } catch {
+          throw new Error('Invalid JSON for --set. Example: \'{"key":"value"}\'');
+        }
         await api.post(`/projects/${pid}/customers/${customerId}/attributes`, {
           attributes: attrs,
         });

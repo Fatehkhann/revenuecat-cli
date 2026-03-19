@@ -129,7 +129,14 @@ export function register(program: Command): void {
       const pid = requireProjectId(opts);
       const data = await api.post(
         `/projects/${pid}/customers/${customerId}/virtual_currencies/transactions`,
-        { currency_code: opts.currencyCode, amount: parseInt(opts.amount) },
+        {
+          currency_code: opts.currencyCode,
+          amount: (() => {
+            const n = parseInt(opts.amount, 10);
+            if (Number.isNaN(n)) throw new Error('--amount must be a number');
+            return n;
+          })(),
+        },
       );
       output(data, () => printSuccess(`Transaction created for ${customerId}.`));
     });
