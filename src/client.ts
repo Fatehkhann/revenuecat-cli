@@ -32,7 +32,22 @@ async function handleResponse(res: Response): Promise<any> {
     const type = data?.type || 'unknown_error';
     const retryable = data?.retryable || false;
     const docUrl = data?.doc_url;
-    throw new ApiError(res.status, type, msg, retryable, docUrl);
+
+    // Add specific error handling for known RevenueCat API error types
+    if (type === 'app_not_found' || type === 'invalid_app_id') {
+      throw new ApiError(res.status, type, `App not found. Please check your App ID. ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
+    } else if (type === 'unauthorized' || type === 'invalid_api_key') {
+      throw new ApiError(res.status, type, `Invalid API key or insufficient permissions. Please check your API key. ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
+    } else if (type === 'rate_limited') {
+      throw new ApiError(res.status, type, `Rate limit exceeded. Please wait a moment before retrying. ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
+    } else if (type === 'invalid_query_params' || type.startsWith('validation_error')) {
+      throw new ApiError(res.status, type, `Invalid query parameters or malformed request. ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
+    } else if (type === 'internal_server_error') {
+      throw new ApiError(res.status, type, `RevenueCat API encountered an internal error. Please try again later. ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
+    }
+
+    // Default error handling for unknown or unhandled types
+    throw new ApiError(res.status, type, `${msg} ${docUrl ? `See: ${docUrl}` : ''}`, retryable, docUrl);
   }
 
   return data;

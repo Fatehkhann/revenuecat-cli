@@ -33,9 +33,9 @@
     "ora": "^5.4.1"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.5.2",
     "@types/node-fetch": "^2.6.13",
-    "typescript": "^5.9.3"
+    "typescript": "^5.5.2"
   },
   "engines": {
     "node": ">=16"

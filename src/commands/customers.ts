@@ -34,6 +34,10 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (customerId, opts) => {
       const pid = requireProjectId(opts);
+      // Added check for customerId
+      if (!customerId) {
+        throw new Error('Customer ID is required. Please provide it as an argument.');
+      }
       const data = await api.get(`/projects/${pid}/customers/${customerId}`);
       output(data, () => {
         printTable(

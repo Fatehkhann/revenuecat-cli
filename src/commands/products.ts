@@ -67,10 +67,16 @@ export function register(program: Command): void {
     .description('Update a product')
     .option('-p, --project <id>', 'Project ID')
     .option('--display-name <name>', 'Display name')
+    .option('--store-identifier <id>', 'Store identifier')
+    .option('--app-id <id>', 'App ID')
+    .option('--type <type>', 'Product type: subscription or one_time')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
       const body: any = {};
       if (opts.displayName) body.display_name = opts.displayName;
+      if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
+      if (opts.appId) body.app_id = opts.appId;
+      if (opts.type) body.type = opts.type;
       const data = await api.post(`/projects/${pid}/products/${productId}`, body);
       output(data, () => printSuccess(`Product ${productId} updated.`));
     });

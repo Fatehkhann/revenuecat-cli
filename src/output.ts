@@ -15,7 +15,7 @@ export function printJson(data: any): void {
   console.log(JSON.stringify(data, null, 2));
 }
 
-export function printTable(headers: string[], rows: string[][]): void {
+export function printTable(headers: string[], rows: any[][]): void {
   if (jsonMode) return;
   const table = new Table({
     head: headers.map((h) => chalk.cyan.bold(h)),
@@ -27,7 +27,10 @@ export function printTable(headers: string[], rows: string[][]): void {
 }
 
 export function printSuccess(msg: string): void {
-  if (jsonMode) return;
+  if (jsonMode) {
+    console.log(chalk.green('✓ ') + msg);
+    return;
+  }
   console.log(chalk.green('✓ ') + msg);
 }
 
