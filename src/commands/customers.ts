@@ -38,16 +38,21 @@ export function register(program: Command): void {
       if (!customerId) {
         throw new Error('Customer ID is required. Please provide it as an argument.');
       }
-      const data = await api.get(`/projects/${pid}/customers/${customerId}`);
-      output(data, () => {
-        printTable(
-          ['Field', 'Value'],
-          Object.entries(data).map(([k, v]) => [
-            k,
-            typeof v === 'object' ? JSON.stringify(v) : String(v ?? '-'),
-          ]),
-        );
-      });
+      try { // Added try block
+        const data = await api.get(`/projects/${pid}/customers/${customerId}`);
+        output(data, () => {
+          printTable(
+            ['Field', 'Value'],
+            Object.entries(data).map(([k, v]) => [
+              k,
+              typeof v === 'object' ? JSON.stringify(v) : String(v ?? '-'),
+            ]),
+          );
+        });
+      } catch (error) { // Added catch block
+        console.error(`Error fetching customer ${customerId}:`, error);
+        throw new Error(`Failed to retrieve customer ${customerId}. Please check the ID and try again.`);
+      }
     });
 
   cmd
