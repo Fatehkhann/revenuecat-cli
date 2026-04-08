@@ -100,24 +100,30 @@ export async function paginate(
   path: string,
   query?: Record<string, string>,
   limit?: number,
+  perPageLimit: number = 100, // New parameter for per-page limit
 ): Promise<any[]> {
   const all: any[] = [];
   let cursor: string | undefined;
-  const perPage = Math.min(limit || 100, 100).toString();
+  // Cap perPage at a reasonable maximum, e.g., 1000, or the provided limit if smaller
+  const actualPerPage = Math.min(limit && limit < perPageLimit ? limit : perPageLimit, 1000).toString();
 
   while (true) {
-    const q: Record<string, string> = { ...query, limit: perPage };
+    const q: Record<string, string> = { ...query, limit: actualPerPage };
     if (cursor) q.starting_after = cursor;
 
     const data = await get(path, q);
-    const items = data.items || [];
+    // Ensure data.items exists before proceeding
+    const items = Array.isArray(data?.items) ? data.items : [];
     all.push(...items);
 
     if (limit && all.length >= limit) return all.slice(0, limit);
+    // Check if there's a next page and if items were returned
     if (!data.next_page || items.length === 0) break;
 
     const lastItem = items[items.length - 1];
-    cursor = lastItem.id;
+    // Assuming 'id' is always the cursor key for now, but could be made configurable
+    cursor = lastItem?.id;
+    if (!cursor) break; // If no id, cannot paginate further
   }
 
   return all;
