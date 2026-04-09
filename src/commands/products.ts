@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import * as api from '../client';
-import { output, printTable, printSuccess, truncate } from '../output';
+import { output, printTable, printSuccess } from '../output';
 import { requireProjectId } from '../helpers';
 
 export function register(program: Command): void {
