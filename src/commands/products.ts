@@ -77,7 +77,7 @@ export function register(program: Command): void {
       if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
       if (opts.appId) body.app_id = opts.appId;
       if (opts.type) body.type = opts.type;
-      const data = await api.post(`/projects/${pid}/products/${productId}`, body);
+      const data = await api.patch(`/projects/${pid}/products/${productId}`, body);
       output(data, () => printSuccess(`Product ${productId} updated.`));
     });
 

@@ -88,6 +88,15 @@ export async function post(path: string, body?: any): Promise<any> {
   return handleResponse(res);
 }
 
+export async function patch(path: string, body?: any): Promise<any> { // Added PATCH support
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: 'PATCH',
+    headers: headers(),
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return handleResponse(res);
+}
+
 export async function del(path: string): Promise<any> {
   const res = await fetch(`${BASE_URL}${path}`, {
     method: 'DELETE',
