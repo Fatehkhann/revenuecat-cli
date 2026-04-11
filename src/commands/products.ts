@@ -16,10 +16,11 @@ export function register(program: Command): void {
       const data = await api.paginate(`/projects/${pid}/products`);
       output(data, () => {
         printTable(
-          ['ID', 'Store Identifier', 'Type', 'App ID'],
+          ['ID', 'Store Identifier', 'Display Name', 'Type', 'App ID'],
           data.map((p: any) => [
             p.id,
             p.store_identifier || '-',
+            p.display_name || '-',
             p.type || '-',
             p.app_id || '-',
           ]),
