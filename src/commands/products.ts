@@ -87,8 +87,13 @@ export function register(program: Command): void {
     .command('delete <productId>')
     .description('Delete a product')
     .option('-p, --project <id>', 'Project ID')
+    .option('-f, --force', 'Force deletion without confirmation')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
+      if (!opts.force) {
+        printSuccess('Deletion requires --force flag to confirm.');
+        return;
+      }
       await api.del(`/projects/${pid}/products/${productId}`);
       printSuccess(`Product ${productId} deleted.`);
     });
