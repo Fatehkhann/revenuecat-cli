@@ -14,17 +14,21 @@ export function register(program: Command): void {
     .action(async (opts) => {
       const pid = requireProjectId(opts);
       const data = await api.paginate(`/projects/${pid}/products`);
-      output(data, () => {
-        printTable(
-          ['ID', 'Store Identifier', 'Type', 'App ID'],
-          data.map((p: any) => [
-            p.id,
-            p.store_identifier || '-',
-            p.type || '-',
-            p.app_id || '-',
-          ]),
-        );
-      });
+      if (data.length === 0) {
+        printSuccess('No products found');
+      } else {
+        output(data, () => {
+          printTable(
+            ['ID', 'Store Identifier', 'Type', 'App ID'],
+            data.map((p: any) => [
+              p.id,
+              p.store_identifier || '-',
+              p.type || '-',
+              p.app_id || '-',
+            ]),
+          );
+        });
+      }
     });
 
   cmd
