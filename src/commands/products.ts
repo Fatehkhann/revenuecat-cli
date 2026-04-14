@@ -88,7 +88,13 @@ export function register(program: Command): void {
       if (opts.displayName) body.display_name = opts.displayName;
       if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
       if (opts.appId) body.app_id = opts.appId;
-      if (opts.type) body.type = opts.type;
+      if (opts.type) {
+        // Validate product type
+        if (opts.type !== 'subscription' && opts.type !== 'one_time') {
+          throw new Error(`Invalid product type: ${opts.type}. Must be either 'subscription' or 'one_time'.`);
+        }
+        body.type = opts.type;
+      }
       const data = await api.patch(`/projects/${pid}/products/${productId}`, body);
       output(data, () => printSuccess(`Product ${productId} updated.`));
     });
