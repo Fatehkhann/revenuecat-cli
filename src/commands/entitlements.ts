@@ -81,8 +81,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (entitlementId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/entitlements/${entitlementId}/actions/archive`);
-      printSuccess(`Entitlement ${entitlementId} archived.`);
+      const data = await api.post(`/projects/${pid}/entitlements/${entitlementId}/actions/archive`);
+      output(data, () => printSuccess(`Entitlement ${entitlementId} archived.`));
     });
 
   cmd
@@ -91,8 +91,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (entitlementId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/entitlements/${entitlementId}/actions/unarchive`);
-      printSuccess(`Entitlement ${entitlementId} unarchived.`);
+      const data = await api.post(`/projects/${pid}/entitlements/${entitlementId}/actions/unarchive`);
+      output(data, () => printSuccess(`Entitlement ${entitlementId} unarchived.`));
     });
 
   cmd
