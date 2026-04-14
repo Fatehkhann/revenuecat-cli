@@ -77,7 +77,7 @@ export function register(program: Command): void {
     .action(async (code, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/virtual_currencies/${code}`);
-      printSuccess(`Virtual currency ${code} deleted.`);
+      output(null, () => printSuccess(`Virtual currency ${code} deleted.`));
     });
 
   cmd

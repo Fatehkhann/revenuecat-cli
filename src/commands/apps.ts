@@ -74,6 +74,6 @@ export function register(program: Command): void {
     .action(async (appId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/apps/${appId}`);
-      printSuccess(`App ${appId} deleted.`);
+      output(null, () => printSuccess(`App ${appId} deleted.`));
     });
 }

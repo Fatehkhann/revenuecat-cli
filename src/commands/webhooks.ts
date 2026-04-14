@@ -104,6 +104,6 @@ export function register(program: Command): void {
     .action(async (webhookId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/integrations/webhooks/${webhookId}`);
-      printSuccess(`Webhook ${webhookId} deleted.`);
+      output(null, () => printSuccess(`Webhook ${webhookId} deleted.`));
     });
 }

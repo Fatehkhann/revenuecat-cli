@@ -80,7 +80,7 @@ export function register(program: Command): void {
     .action(async (offeringId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/offerings/${offeringId}`);
-      printSuccess(`Offering ${offeringId} deleted.`);
+      output(null, () => printSuccess(`Offering ${offeringId} deleted.`));
     });
 
   cmd

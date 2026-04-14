@@ -80,7 +80,7 @@ export function register(program: Command): void {
         }
       }
       await api.del(`/projects/${pid}/customers/${customerId}`);
-      printSuccess(`Customer ${customerId} deleted.`);
+      output(null, () => printSuccess(`Customer ${customerId} deleted.`));
     });
 
   cmd
