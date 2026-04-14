@@ -128,8 +128,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/products/${productId}/actions/archive`);
-      printSuccess(`Product ${productId} archived.`);
+      const data = await api.post(`/projects/${pid}/products/${productId}/actions/archive`);
+      output(data, () => printSuccess(`Product ${productId} archived.`));
     });
 
   cmd
@@ -138,7 +138,7 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/products/${productId}/actions/unarchive`);
-      printSuccess(`Product ${productId} unarchived.`);
+      const data = await api.post(`/projects/${pid}/products/${productId}/actions/unarchive`);
+      output(data, () => printSuccess(`Product ${productId} unarchived.`));
     });
 }

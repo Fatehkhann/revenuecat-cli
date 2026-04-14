@@ -86,8 +86,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (code, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/virtual_currencies/${code}/actions/archive`);
-      printSuccess(`Virtual currency ${code} archived.`);
+      const data = await api.post(`/projects/${pid}/virtual_currencies/${code}/actions/archive`);
+      output(data, () => printSuccess(`Virtual currency ${code} archived.`));
     });
 
   cmd
@@ -96,8 +96,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (code, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/virtual_currencies/${code}/actions/unarchive`);
-      printSuccess(`Virtual currency ${code} unarchived.`);
+      const data = await api.post(`/projects/${pid}/virtual_currencies/${code}/actions/unarchive`);
+      output(data, () => printSuccess(`Virtual currency ${code} unarchived.`));
     });
 
   // Customer-level virtual currency commands

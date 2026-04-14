@@ -89,8 +89,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (offeringId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/offerings/${offeringId}/actions/archive`);
-      printSuccess(`Offering ${offeringId} archived.`);
+      const data = await api.post(`/projects/${pid}/offerings/${offeringId}/actions/archive`);
+      output(data, () => printSuccess(`Offering ${offeringId} archived.`));
     });
 
   cmd
@@ -99,7 +99,7 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (offeringId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/offerings/${offeringId}/actions/unarchive`);
-      printSuccess(`Offering ${offeringId} unarchived.`);
+      const data = await api.post(`/projects/${pid}/offerings/${offeringId}/actions/unarchive`);
+      output(data, () => printSuccess(`Offering ${offeringId} unarchived.`));
     });
 }
