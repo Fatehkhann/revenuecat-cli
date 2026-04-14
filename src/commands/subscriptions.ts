@@ -99,8 +99,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (subscriptionId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/subscriptions/${subscriptionId}/actions/cancel`);
-      printSuccess(`Subscription ${subscriptionId} cancelled.`);
+      const data = await api.post(`/projects/${pid}/subscriptions/${subscriptionId}/actions/cancel`);
+      output(data, () => printSuccess(`Subscription ${subscriptionId} cancelled.`));
     });
 
   cmd
@@ -109,8 +109,8 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (subscriptionId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/subscriptions/${subscriptionId}/actions/refund`);
-      printSuccess(`Subscription ${subscriptionId} refunded.`);
+      const data = await api.post(`/projects/${pid}/subscriptions/${subscriptionId}/actions/refund`);
+      output(data, () => printSuccess(`Subscription ${subscriptionId} refunded.`));
     });
 
   cmd
