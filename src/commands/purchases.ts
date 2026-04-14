@@ -74,7 +74,7 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (purchaseId, opts) => {
       const pid = requireProjectId(opts);
-      await api.post(`/projects/${pid}/purchases/${purchaseId}/actions/refund`);
-      printSuccess(`Purchase ${purchaseId} refunded.`);
+      const data = await api.post(`/projects/${pid}/purchases/${purchaseId}/actions/refund`);
+      output(data, () => printSuccess(`Purchase ${purchaseId} refunded.`));
     });
 }
