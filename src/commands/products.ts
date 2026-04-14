@@ -65,7 +65,7 @@ export function register(program: Command): void {
     .description('Create a product')
     .option('-p, --project <id>', 'Project ID')
     .requiredOption('--store-identifier <id>', 'Store identifier (e.g. com.app.monthly)')
-      .option('--display-name <name>', 'Display name')
+    .option('--display-name <name>', 'Display name')
     .requiredOption('--app-id <id>', 'App ID')
     .requiredOption('--type <type>', 'Product type: subscription or one_time')
     .action(async (opts) => {
@@ -110,8 +110,7 @@ export function register(program: Command): void {
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
       if (!opts.force) {
-        printSuccess('Deletion requires --force flag to confirm.');
-        return;
+        throw new Error('Deletion requires --force flag to confirm.');
       }
       await api.del(`/projects/${pid}/products/${productId}`);
       printSuccess(`Product ${productId} deleted.`);
