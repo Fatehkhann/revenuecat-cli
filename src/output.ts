@@ -27,10 +27,7 @@ export function printTable(headers: string[], rows: any[][]): void {
 }
 
 export function printSuccess(msg: string): void {
-  if (jsonMode) {
-    console.log(chalk.green('✓ ') + msg);
-    return;
-  }
+  if (jsonMode) return;
   console.log(chalk.green('✓ ') + msg);
 }
 
