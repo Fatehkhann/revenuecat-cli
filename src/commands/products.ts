@@ -59,6 +59,12 @@ export function register(program: Command): void {
     .requiredOption('--type <type>', 'Product type: subscription or one_time')
     .action(async (opts) => {
       const pid = requireProjectId(opts);
+      
+      // Validate product type
+      if (opts.type !== 'subscription' && opts.type !== 'one_time') {
+        throw new Error(`Invalid product type: ${opts.type}. Must be either 'subscription' or 'one_time'.`);
+      }
+      
       const data = await api.post(`/projects/${pid}/products`, {
         store_identifier: opts.storeIdentifier,
         app_id: opts.appId,
