@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import * as api from '../client';
 import { output, printTable, printSuccess, formatDate, truncate } from '../output';
-import { requireProjectId } from '../helpers';
+import { requireProjectId, confirmAction } from '../helpers';
 
 export function register(program: Command): void {
   const cmd = program.command('customers').description('Manage customers');
@@ -69,8 +69,16 @@ export function register(program: Command): void {
     .command('delete <customerId>')
     .description('Delete a customer')
     .option('-p, --project <id>', 'Project ID')
+    .option('--force', 'Skip confirmation prompt')
     .action(async (customerId, opts) => {
       const pid = requireProjectId(opts);
+      if (!opts.force) {
+        const confirmed = await confirmAction(`Delete customer ${customerId}?`);
+        if (!confirmed) {
+          console.log('Delete cancelled.');
+          return;
+        }
+      }
       await api.del(`/projects/${pid}/customers/${customerId}`);
       printSuccess(`Customer ${customerId} deleted.`);
     });
