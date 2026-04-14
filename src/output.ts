@@ -32,6 +32,10 @@ export function printSuccess(msg: string): void {
 }
 
 export function printError(msg: string): void {
+  if (jsonMode) {
+    console.error(JSON.stringify({ error: msg }, null, 2));
+    return;
+  }
   console.error(chalk.red('✗ ') + msg);
 }
 
