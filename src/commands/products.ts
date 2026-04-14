@@ -3,6 +3,17 @@ import * as api from '../client';
 import { output, printTable, printSuccess } from '../output';
 import { requireProjectId } from '../helpers';
 
+const VALID_PRODUCT_TYPES = ['subscription', 'one_time'] as const;
+type ProductType = typeof VALID_PRODUCT_TYPES[number];
+
+function validateProductType(type: string): asserts type is ProductType {
+  if (!VALID_PRODUCT_TYPES.includes(type as any)) {
+    throw new Error(
+      `Invalid product type: ${type}. Must be either 'subscription' or 'one_time'.`,
+    );
+  }
+}
+
 export function register(program: Command): void {
   const cmd = program.command('products').description('Manage products');
 
@@ -59,12 +70,7 @@ export function register(program: Command): void {
     .requiredOption('--type <type>', 'Product type: subscription or one_time')
     .action(async (opts) => {
       const pid = requireProjectId(opts);
-      
-      // Validate product type
-      if (opts.type !== 'subscription' && opts.type !== 'one_time') {
-        throw new Error(`Invalid product type: ${opts.type}. Must be either 'subscription' or 'one_time'.`);
-      }
-      
+      validateProductType(opts.type);
       const data = await api.post(`/projects/${pid}/products`, {
         store_identifier: opts.storeIdentifier,
         app_id: opts.appId,
@@ -89,10 +95,7 @@ export function register(program: Command): void {
       if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
       if (opts.appId) body.app_id = opts.appId;
       if (opts.type) {
-        // Validate product type
-        if (opts.type !== 'subscription' && opts.type !== 'one_time') {
-          throw new Error(`Invalid product type: ${opts.type}. Must be either 'subscription' or 'one_time'.`);
-        }
+        validateProductType(opts.type);
         body.type = opts.type;
       }
       const data = await api.patch(`/projects/${pid}/products/${productId}`, body);
