@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import * as api from '../client';
 import { output, printTable, printSuccess } from '../output';
-import { requireProjectId } from '../helpers';
+import { requireProjectId, confirmAction } from '../helpers';
 
 const VALID_PRODUCT_TYPES = ['subscription', 'one_time'] as const;
 type ProductType = typeof VALID_PRODUCT_TYPES[number];
@@ -110,7 +110,13 @@ export function register(program: Command): void {
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
       if (!opts.force) {
-        throw new Error('Deletion requires --force flag to confirm.');
+        const confirmed = await confirmAction(
+          `Are you sure you want to delete product ${productId}?`,
+        );
+        if (!confirmed) {
+          printSuccess('Deletion cancelled.');
+          return;
+        }
       }
       await api.del(`/projects/${pid}/products/${productId}`);
       printSuccess(`Product ${productId} deleted.`);
