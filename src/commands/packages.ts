@@ -123,10 +123,10 @@ export function register(program: Command): void {
     .action(async (packageId, opts) => {
       const pid = requireProjectId(opts);
       const productIds = opts.productIds.split(',').map((s: string) => s.trim());
-      await api.post(`/projects/${pid}/packages/${packageId}/actions/attach_products`, {
+      const data = await api.post(`/projects/${pid}/packages/${packageId}/actions/attach_products`, {
         product_ids: productIds,
       });
-      output(null, () => printSuccess(`Products attached to package ${packageId}.`));
+      output(data, () => printSuccess(`Products attached to package ${packageId}.`));
     });
 
   cmd
@@ -137,9 +137,9 @@ export function register(program: Command): void {
     .action(async (packageId, opts) => {
       const pid = requireProjectId(opts);
       const productIds = opts.productIds.split(',').map((s: string) => s.trim());
-      await api.post(`/projects/${pid}/packages/${packageId}/actions/detach_products`, {
+      const data = await api.post(`/projects/${pid}/packages/${packageId}/actions/detach_products`, {
         product_ids: productIds,
       });
-      output(null, () => printSuccess(`Products detached from package ${packageId}.`));
+      output(data, () => printSuccess(`Products detached from package ${packageId}.`));
     });
 }

@@ -121,11 +121,11 @@ export function register(program: Command): void {
     .action(async (entitlementId, opts) => {
       const pid = requireProjectId(opts);
       const productIds = opts.productIds.split(',').map((s: string) => s.trim());
-      await api.post(
+      const data = await api.post(
         `/projects/${pid}/entitlements/${entitlementId}/actions/attach_products`,
         { product_ids: productIds },
       );
-      printSuccess(`Products attached to entitlement ${entitlementId}.`);
+      output(data, () => printSuccess(`Products attached to entitlement ${entitlementId}.`));
     });
 
   cmd
@@ -136,10 +136,10 @@ export function register(program: Command): void {
     .action(async (entitlementId, opts) => {
       const pid = requireProjectId(opts);
       const productIds = opts.productIds.split(',').map((s: string) => s.trim());
-      await api.post(
+      const data = await api.post(
         `/projects/${pid}/entitlements/${entitlementId}/actions/detach_products`,
         { product_ids: productIds },
       );
-      printSuccess(`Products detached from entitlement ${entitlementId}.`);
+      output(data, () => printSuccess(`Products detached from entitlement ${entitlementId}.`));
     });
 }
