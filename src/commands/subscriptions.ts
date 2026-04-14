@@ -123,7 +123,13 @@ export function register(program: Command): void {
         `/projects/${pid}/subscriptions/${subscriptionId}/authenticated_management_url`,
       );
       output(data, () => {
-        console.log(data.url || JSON.stringify(data));
+        printTable(
+          ['Field', 'Value'],
+          Object.entries(data).map(([k, v]) => [
+            k,
+            typeof v === 'object' ? JSON.stringify(v) : String(v ?? '-'),
+          ]),
+        );
       });
     });
 }
