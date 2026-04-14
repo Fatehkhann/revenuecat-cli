@@ -114,12 +114,12 @@ export function register(program: Command): void {
           `Are you sure you want to delete product ${productId}?`,
         );
         if (!confirmed) {
-          printSuccess('Deletion cancelled.');
+          output(null, () => printSuccess('Deletion cancelled.'));
           return;
         }
       }
       await api.del(`/projects/${pid}/products/${productId}`);
-      printSuccess(`Product ${productId} deleted.`);
+      output(null, () => printSuccess(`Product ${productId} deleted.`));
     });
 
   cmd

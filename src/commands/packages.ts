@@ -96,7 +96,7 @@ export function register(program: Command): void {
     .action(async (packageId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/packages/${packageId}`);
-      printSuccess(`Package ${packageId} deleted.`);
+      output(null, () => printSuccess(`Package ${packageId} deleted.`));
     });
 
   cmd
@@ -126,7 +126,7 @@ export function register(program: Command): void {
       await api.post(`/projects/${pid}/packages/${packageId}/actions/attach_products`, {
         product_ids: productIds,
       });
-      printSuccess(`Products attached to package ${packageId}.`);
+      output(null, () => printSuccess(`Products attached to package ${packageId}.`));
     });
 
   cmd
@@ -140,6 +140,6 @@ export function register(program: Command): void {
       await api.post(`/projects/${pid}/packages/${packageId}/actions/detach_products`, {
         product_ids: productIds,
       });
-      printSuccess(`Products detached from package ${packageId}.`);
+      output(null, () => printSuccess(`Products detached from package ${packageId}.`));
     });
 }

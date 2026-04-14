@@ -48,6 +48,6 @@ export function register(program: Command): void {
     .action(async (paywallId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/paywalls/${paywallId}`);
-      printSuccess(`Paywall ${paywallId} deleted.`);
+      output(null, () => printSuccess(`Paywall ${paywallId} deleted.`));
     });
 }

@@ -72,7 +72,7 @@ export function register(program: Command): void {
     .action(async (entitlementId, opts) => {
       const pid = requireProjectId(opts);
       await api.del(`/projects/${pid}/entitlements/${entitlementId}`);
-      printSuccess(`Entitlement ${entitlementId} deleted.`);
+      output(null, () => printSuccess(`Entitlement ${entitlementId} deleted.`));
     });
 
   cmd
