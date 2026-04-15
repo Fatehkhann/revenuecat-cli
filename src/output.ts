@@ -31,9 +31,14 @@ export function printSuccess(msg: string): void {
   console.log(chalk.green('✓ ') + msg);
 }
 
-export function printError(msg: string): void {
+export function printError(msg: string, errorType?: string, status?: number): void {
   if (jsonMode) {
-    console.error(JSON.stringify({ error: msg }, null, 2));
+    const errorObj: any = {
+      error: msg,
+    };
+    if (errorType) errorObj.type = errorType;
+    if (status !== undefined) errorObj.status = status;
+    console.error(JSON.stringify(errorObj, null, 2));
     return;
   }
   console.error(chalk.red('✗ ') + msg);

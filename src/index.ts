@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { setJsonMode, printError } from './output';
+import { setJsonMode, isJsonMode, printError } from './output';
 import { ApiError } from './client';
 
 import * as configure from './commands/configure';
@@ -59,9 +59,10 @@ program.parseAsync = async (argv?: string[]) => {
     return await originalParse(argv);
   } catch (err: any) {
     if (err instanceof ApiError) {
-      printError(`[${err.status}] ${err.message}`);
-      if (err.docUrl) printError(`Docs: ${err.docUrl}`);
-      if (err.retryable) printError('This error is retryable.');
+      printError(err.message, err.type, err.status);
+      // Print additional context in non-JSON mode
+      if (!isJsonMode() && err.docUrl) printError(`Docs: ${err.docUrl}`);
+      if (!isJsonMode() && err.retryable) printError('This error is retryable.');
       process.exit(1);
     } else {
       printError(err.message || String(err));
