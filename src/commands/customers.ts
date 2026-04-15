@@ -11,16 +11,12 @@ export function register(program: Command): void {
     .alias('ls')
     .description('List customers')
     .option('-p, --project <id>', 'Project ID')
-    .option('--limit <n>', 'Max results', '20')
-    .option('--starting-after <id>', 'Cursor for pagination')
+    .option('--limit <n>', 'Max results to fetch')
     .action(async (opts) => {
       const pid = requireProjectId(opts);
-      const query: Record<string, string> = {};
-      if (opts.limit) query.limit = opts.limit;
-      if (opts.startingAfter) query.starting_after = opts.startingAfter;
-      const data = await api.get(`/projects/${pid}/customers`, query);
-      const items = data.items || [];
-      output(data, () => {
+      const limit = opts.limit ? parseInt(opts.limit, 10) : undefined;
+      const items = await api.paginate(`/projects/${pid}/customers`, {}, limit);
+      output(items, () => {
         printTable(
           ['ID', 'First Seen', 'Last Seen'],
           items.map((c: any) => [c.id, formatDate(c.first_seen), formatDate(c.last_seen)]),
