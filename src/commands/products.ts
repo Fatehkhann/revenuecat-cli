@@ -98,9 +98,9 @@ export function register(program: Command): void {
 }
 
       const body: ProductUpdateBody = {};
-      if (opts.displayName) body.display_name = opts.displayName;
-      if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
-      if (opts.appId) body.app_id = opts.appId;
+      if (opts.displayName !== undefined) body.display_name = opts.displayName;
+      if (opts.storeIdentifier !== undefined) body.store_identifier = opts.storeIdentifier;
+      if (opts.appId !== undefined) body.app_id = opts.appId;
       if (opts.type) {
         validateProductType(opts.type);
         body.type = opts.type;
