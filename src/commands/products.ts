@@ -90,7 +90,14 @@ export function register(program: Command): void {
     .option('--type <type>', 'Product type: subscription or one_time')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
-      const body: any = {};
+      interface ProductUpdateBody {
+  display_name?: string;
+  store_identifier?: string;
+  app_id?: string;
+  type?: ProductType;
+}
+
+      const body: ProductUpdateBody = {};
       if (opts.displayName) body.display_name = opts.displayName;
       if (opts.storeIdentifier) body.store_identifier = opts.storeIdentifier;
       if (opts.appId) body.app_id = opts.appId;
