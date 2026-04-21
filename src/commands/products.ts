@@ -6,6 +6,13 @@ import { requireProjectId, confirmAction } from '../helpers';
 const VALID_PRODUCT_TYPES = ['subscription', 'one_time'] as const;
 type ProductType = typeof VALID_PRODUCT_TYPES[number];
 
+interface Product {
+  id: string;
+  store_identifier?: string;
+  type?: ProductType;
+  app_id?: string;
+}
+
 function validateProductType(type: string): asserts type is ProductType {
   if (!VALID_PRODUCT_TYPES.includes(type as any)) {
     throw new Error(
@@ -24,14 +31,14 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (opts) => {
       const pid = requireProjectId(opts);
-      const data = await api.paginate(`/projects/${pid}/products`);
+      const data: Product[] = await api.paginate(`/projects/${pid}/products`);
       if (data.length === 0) {
         printSuccess('No products found');
       } else {
         output(data, () => {
           printTable(
             ['ID', 'Store Identifier', 'Type', 'App ID'],
-            data.map((p: any) => [
+            data.map((p: Product) => [
               p.id,
               p.store_identifier || '-',
               p.type || '-',
