@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import * as api from '../client';
 import { output, printTable, printSuccess } from '../output';
 import { requireProjectId, confirmAction } from '../helpers';
@@ -67,7 +67,7 @@ export function register(program: Command): void {
     .requiredOption('--store-identifier <id>', 'Store identifier (e.g. com.app.monthly)')
     .option('--display-name <name>', 'Display name')
     .requiredOption('--app-id <id>', 'App ID')
-    .requiredOption('--type <type>', 'Product type: subscription or one_time')
+    .addOption(new Option('--type <type>', 'Product type: subscription or one_time').choices(['subscription', 'one_time']).makeOptionMandatory())
     .action(async (opts) => {
       const pid = requireProjectId(opts);
       validateProductType(opts.type);
@@ -87,7 +87,7 @@ export function register(program: Command): void {
     .option('--display-name <name>', 'Display name')
     .option('--store-identifier <id>', 'Store identifier')
     .option('--app-id <id>', 'App ID')
-    .option('--type <type>', 'Product type: subscription or one_time')
+    .addOption(new Option('--type <type>', 'Product type: subscription or one_time').choices(['subscription', 'one_time']))
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
       interface ProductUpdateBody {
