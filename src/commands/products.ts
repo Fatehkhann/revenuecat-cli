@@ -13,6 +13,13 @@ interface Product {
   app_id?: string;
 }
 
+interface ProductUpdateBody {
+  display_name?: string;
+  store_identifier?: string;
+  app_id?: string;
+  type?: ProductType;
+}
+
 function validateProductType(type: string): asserts type is ProductType {
   if (!VALID_PRODUCT_TYPES.includes(type as any)) {
     throw new Error(
@@ -101,14 +108,7 @@ export function register(program: Command): void {
     .option('--app-id <id>', 'App ID')
     .addOption(new Option('--type <type>', 'Product type: subscription or one_time').choices(['subscription', 'one_time']))
     .action(async (productId, opts) => {
-      const pid = requireProjectId(opts);
-      interface ProductUpdateBody {
-  display_name?: string;
-  store_identifier?: string;
-  app_id?: string;
-  type?: ProductType;
-}
-
+        const pid = requireProjectId(opts);
       const body: ProductUpdateBody = {};
       if (opts.displayName !== undefined) body.display_name = opts.displayName;
       if (opts.storeIdentifier !== undefined) body.store_identifier = opts.storeIdentifier;
