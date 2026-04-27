@@ -75,7 +75,12 @@ export function register(program: Command): void {
     .option('--display-name <name>', 'Display name')
     .requiredOption('--app-id <id>', 'App ID')
     .addOption(new Option('--type <type>', 'Product type: subscription or one_time').choices(['subscription', 'one_time']).makeOptionMandatory())
-    .action(async (opts) => {
+    .action(async (opts: {
+      storeIdentifier: string;
+      displayName?: string;
+      appId: string;
+      type: ProductType;
+    }) => {
       const pid = requireProjectId(opts);
       validateProductType(opts.type);
       const data = await api.post(`/projects/${pid}/products`, {
