@@ -119,6 +119,10 @@ export function register(program: Command): void {
         validateProductType(opts.type);
         body.type = opts.type;
       }
+      if (Object.keys(body).length === 0) {
+        output(null, () => printSuccess('No update options provided. Nothing to do.'));
+        return;
+      }
       const data = await api.patch(`/projects/${pid}/products/${productId}`, body);
       output(data, () => printSuccess(`Product ${productId} updated.`));
     });
