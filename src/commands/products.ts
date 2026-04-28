@@ -20,6 +20,13 @@ interface ProductUpdateBody {
   type?: ProductType;
 }
 
+interface ProductCreateOptions {
+  storeIdentifier: string;
+  displayName?: string;
+  appId: string;
+  type: ProductType;
+}
+
 function validateProductType(type: string): asserts type is ProductType {
   if (!VALID_PRODUCT_TYPES.includes(type as any)) {
     throw new Error(
@@ -82,12 +89,7 @@ export function register(program: Command): void {
     .option('--display-name <name>', 'Display name')
     .requiredOption('--app-id <id>', 'App ID')
     .addOption(new Option('--type <type>', 'Product type: subscription or one_time').choices(['subscription', 'one_time']).makeOptionMandatory())
-    .action(async (opts: {
-      storeIdentifier: string;
-      displayName?: string;
-      appId: string;
-      type: ProductType;
-    }) => {
+    .action(async (opts: ProductCreateOptions) => {
       const pid = requireProjectId(opts);
       validateProductType(opts.type);
       const data = await api.post(`/projects/${pid}/products`, {
