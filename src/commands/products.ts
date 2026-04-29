@@ -69,7 +69,7 @@ export function register(program: Command): void {
     .option('-p, --project <id>', 'Project ID')
     .action(async (productId, opts) => {
       const pid = requireProjectId(opts);
-      const data = await api.get(`/projects/${pid}/products/${productId}`);
+      const data: Product = await api.get(`/projects/${pid}/products/${productId}`);
       output(data, () => {
         printTable(
           ['Field', 'Value'],
