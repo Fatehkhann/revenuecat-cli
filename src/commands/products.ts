@@ -28,7 +28,7 @@ interface ProductCreateOptions {
 }
 
 function validateProductType(type: string): asserts type is ProductType {
-  if (!VALID_PRODUCT_TYPES.includes(type as any)) {
+  if (!(VALID_PRODUCT_TYPES as readonly string[]).includes(type)) {
     throw new Error(
       `Invalid product type: ${type}. Must be either 'subscription' or 'one_time'.`,
     );
