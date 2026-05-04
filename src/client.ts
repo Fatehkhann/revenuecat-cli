@@ -110,6 +110,7 @@ export async function paginate(
   query?: Record<string, string>,
   limit?: number,
   perPageLimit: number = 100, // New parameter for per-page limit
+  cursorKey: string = 'id', // New parameter for configurable cursor key
 ): Promise<any[]> {
   const all: any[] = [];
   let cursor: string | undefined;
@@ -130,9 +131,9 @@ export async function paginate(
     if (!data.next_page || items.length === 0) break;
 
     const lastItem = items[items.length - 1];
-    // Assuming 'id' is always the cursor key for now, but could be made configurable
-    cursor = lastItem?.id;
-    if (!cursor) break; // If no id, cannot paginate further
+    // Use configurable cursorKey, defaulting to 'id'
+    cursor = lastItem?.[cursorKey];
+    if (!cursor) break; // If no cursor, cannot paginate further
   }
 
   return all;
