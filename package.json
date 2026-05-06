@@ -1,6 +1,6 @@
 {
   "name": "revenuecat-cli",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Unofficial CLI for RevenueCat REST API v2",
   "main": "dist/index.js",
   "bin": {
