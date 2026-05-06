@@ -8,9 +8,10 @@ type ProductType = typeof VALID_PRODUCT_TYPES[number];
 
 interface Product {
   id: string;
-  store_identifier: string;
+  store_identifier?: string;
   type: ProductType;
-  app_id: string;
+  app_id?: string;
+  display_name?: string;
 }
 
 interface ProductUpdateBody {
