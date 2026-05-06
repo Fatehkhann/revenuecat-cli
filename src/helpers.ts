@@ -11,6 +11,13 @@ export function requireProjectId(opts: any): string {
   return id;
 }
 
+export function requireProductIdArg(productId: string | undefined): string {
+  if (!productId) {
+    throw new Error('Product ID is required.');
+  }
+  return productId;
+}
+
 export async function confirmAction(message: string): Promise<boolean> {
   const rl = readline.createInterface({
     input: process.stdin,
