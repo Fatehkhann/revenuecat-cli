@@ -21,6 +21,10 @@ interface ProductUpdateBody {
   type?: ProductType;
 }
 
+interface ProductListOptions {
+  project?: string;
+}
+
 interface ProductCreateOptions {
   storeIdentifier: string;
   displayName?: string;
@@ -44,7 +48,7 @@ export function register(program: Command): void {
     .alias('ls')
     .description('List products')
     .option('-p, --project <id>', 'Project ID')
-    .action(async (opts) => {
+    .action(async (opts: ProductListOptions) => {
       const pid = requireProjectId(opts);
       const data: Product[] = await api.paginate(`/projects/${pid}/products`);
       if (data.length === 0) {
