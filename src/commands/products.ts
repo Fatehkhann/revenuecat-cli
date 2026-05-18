@@ -81,7 +81,7 @@ export function register(program: Command): void {
           ['Field', 'Value'],
           Object.entries(data).map(([k, v]) => [
             k,
-            typeof v === 'object' ? JSON.stringify(v) : String(v ?? '-'),
+            v === null || v === undefined ? '-' : (typeof v === 'object' ? JSON.stringify(v) : String(v)),
           ]),
         );
       });
