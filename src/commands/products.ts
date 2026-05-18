@@ -72,7 +72,7 @@ export function register(program: Command): void {
     .command('get <productId>')
     .description('Get product details')
     .option('-p, --project <id>', 'Project ID')
-    .action(async (productId: string | undefined, opts) => {
+    .action(async (productId: string | undefined, opts: ProductListOptions) => {
       const requiredProductId = requireProductIdArg(productId);
       const pid = requireProjectId(opts);
       const data: Product = await api.get(`/projects/${pid}/products/${requiredProductId}`);
